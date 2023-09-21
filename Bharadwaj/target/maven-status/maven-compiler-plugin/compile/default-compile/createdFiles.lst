@@ -1,0 +1,15 @@
+com\example\movielibrary\contractor\BooksInterface.class
+com\example\movielibrary\contractor\LibraryRepository.class
+com\example\movielibrary\contractor\MoviesInterface.class
+com\example\movielibrary\contractor\PublisherInterface.class
+com\example\movielibrary\controller\LibraryController.class
+com\example\movielibrary\configuration\AppConfig.class
+com\example\movielibrary\LastlibraryApplication.class
+com\example\movielibrary\mapper\BooksMapper.class
+com\example\movielibrary\models\Movie.class
+com\example\movielibrary\models\Director.class
+com\example\movielibrary\mapper\BookPublishersMapper.class
+com\example\movielibrary\daos\BooksDao.class
+com\example\movielibrary\repository\LibraryRepositoryImpl.class
+com\example\movielibrary\models\BookPublishers.class
+com\example\movielibrary\models\Book.class

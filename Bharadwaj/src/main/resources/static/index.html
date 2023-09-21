@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directors</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add custom styles here */
+        body {
+            padding: 20px;
+        }
+
+        /* Style the table */
+        table {
+            width: 100%;
+        }
+
+        header {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1> Movie Management</h1>
+    </header>
+    <div class="container">
+        <h1>Directors List</h1>
+        <div class="form-group">
+            <button id="dir" class="btn btn-primary" onclick="getDirectors()">Get Directors</button>
+        </div>
+        <table id="tab" class="table table-bordered"></table>
+    </div>
+
+    <!-- Include Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function getDirectors() {
+            var table = document.getElementById("tab");
+            table.innerHTML = ``;
+            var tr1 = document.createElement("tr");
+            var th1 = document.createElement("th");
+            var th2 = document.createElement("th");
+            var th3 = document.createElement("th");
+            th1.textContent = "DirectorId";
+            th2.textContent = "DirectorName"
+            th3.textContent = "MoviesList"
+            tr1.appendChild(th1);
+            tr1.appendChild(th2);
+            tr1.appendChild(th3);
+            table.appendChild(tr1);
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/directors", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var data = JSON.parse(xhr.responseText);
+                        var size = data.length;
+                        var tab = document.getElementById("tab");
+                        console.log(data);
+                        data.forEach(function (x) {
+                            var tr = document.createElement("tr");
+                            var td1 = document.createElement("td");
+                            var td2 = document.createElement("td");
+                            var td3 = document.createElement("td");
+                            var link = document.createElement("a");
+                            link.href = "movielist.html?directorId=" + x.directorid;
+                            link.textContent = "MovieList";
+                            td1.textContent = x.directorid;
+                            td2.textContent = x.firstname;
+                            td3.appendChild(link);
+                            tr.appendChild(td1);
+                            tr.appendChild(td2);
+                            tr.appendChild(td3);
+                            tab.appendChild(tr);
+                        });
+                    } else {
+                        console.error("Error: " + xhr.status);
+                    }
+                }
+            }
+            xhr.send();
+        }
+    </script>
+</body>
+
+</html>

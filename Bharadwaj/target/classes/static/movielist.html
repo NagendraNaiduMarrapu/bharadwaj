@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Management</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add custom styles here */
+        body {
+            padding: 20px;
+        }
+
+        /* Style the table */
+        table {
+            width: 100%;
+        }
+
+        header {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1> Movie Management</h1>
+    </header>
+    <div class="container">
+        <div class="form-group">
+            <button id="movie" class="btn btn-primary" onclick="getMovies()">Get Director Movies</button>
+        </div>
+        <div class="form-group">
+            <label for="mid">MovieId:</label>
+            <input type="text" class="form-control" id="mid">
+        </div>
+        <div class="form-group">
+            <label for="did">DirectorId:</label>
+            <input type="text" class="form-control" id="did">
+        </div>
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" class="form-control" id="title">
+        </div>
+        <div class="form-group">
+            <label for="genre">Genre:</label>
+            <input type="text" class="form-control" id="genre">
+        </div>
+        <div class="form-group">
+            <label for="rating">Rating:</label>
+            <input type="text" class="form-control" id="rating">
+        </div>
+        <div class="form-group">
+            <label for="budget">Budget:</label>
+            <input type="text" class="form-control" id="budget">
+        </div>
+        <div class="form-group">
+            <label for="duration">Duration:</label>
+            <input type="text" class="form-control" id="duration">
+        </div>
+        <div class="form-group">
+            <label for="releaseyear">Release Year:</label>
+            <input type="text" class="form-control" id="releaseyear">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-success" onclick="addMovie()">Add</button>
+            <button class="btn btn-primary" onclick="saveMovie()">Save</button>
+            <button class="btn btn-secondary" onclick="firstMovie()">First</button>
+            <button class="btn btn-secondary" onclick="lastMovie()">Last</button>
+            <button class="btn btn-secondary" onclick="previousMovie()">Previous</button>
+            <button class="btn btn-secondary" onclick="nextMovie()">Next</button>
+        </div>
+        <table id="tab" class="table table-bordered"></table>
+    </div>
+
+    <!-- Include Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        var index = 0;
+
+        function getQueryParameter(parameterName) {
+            var urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(parameterName);
+        }
+
+        var directorId = getQueryParameter("directorId");
+        document.getElementById("did").value = directorId;
+
+        console.log("directorId");
+        console.log(directorId);
+
+        function getMovies() {
+            var table = document.getElementById("tab");
+            table.innerHTML = ``;
+            var tr1 = document.createElement("tr");
+            var th1 = document.createElement("th");
+            var th2 = document.createElement("th");
+            var th3 = document.createElement("th");
+            var th4 = document.createElement("th");
+            var th5 = document.createElement("th");
+            var th6 = document.createElement("th");
+            var th7 = document.createElement("th");
+            var th8 = document.createElement("th");
+            var th9 = document.createElement("th");
+            var th10 = document.createElement("th");
+            th1.textContent = "MovieId";
+            th2.textContent = "DirectorId";
+            th3.textContent = "Title";
+            th4.textContent = "Genre";
+            th5.textContent = "Rating";
+            th6.textContent = "Budget";
+            th7.textContent = "Duration";
+            th8.textContent = "ReleaseYear";
+            th9.textContent = "UpdateMovie";
+            th10.textContent = "DeleteMovie"
+            tr1.appendChild(th1);
+            tr1.appendChild(th2);
+            tr1.appendChild(th3);
+            tr1.appendChild(th4);
+            tr1.appendChild(th5);
+            tr1.appendChild(th6);
+            tr1.appendChild(th7);
+            tr1.appendChild(th8);
+            tr1.appendChild(th9);
+            tr1.appendChild(th10);
+            table.appendChild(tr1);
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/movies/" + directorId, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var response = xhr.responseText;
+                        if (response && response.trim() !== "") {
+                            var data = JSON.parse(response);
+                            var size = data.length;
+                            var tab = document.getElementById("tab");
+                            console.log(data);
+                            data.forEach(function (x) {
+                                var tr = document.createElement("tr");
+                                var td1 = document.createElement("td");
+                                var td2 = document.createElement("td");
+                                var td3 = document.createElement("td");
+                                var td4 = document.createElement("td");
+                                var td5 = document.createElement("td");
+                                var td6 = document.createElement("td");
+                                var td7 = document.createElement("td");
+                                var td8 = document.createElement("td");
+                                var td9 = document.createElement("td");
+                                var td10 = document.createElement("td");
+
+                                var button = document.createElement("button");
+                                var button2 = document.createElement("button");
+                                button.onclick = function () {
+                                    updateMovie(x);
+                                }
+                                button2.onclick = function () {
+                                    deleteMovie(x.movieid);
+                                }
+                                button.textContent = "Update";
+                                button2.textContent = "Delete";
+                                td1.textContent = x.movieid;
+                                td2.textContent = x.directorid;
+                                td3.textContent = x.title;
+                                td4.textContent = x.genre;
+                                td5.textContent = x.rating;
+                                td6.textContent = x.budget;
+                                td7.textContent = x.duration;
+                                td8.textContent = x.releaseyear;
+                                td9.appendChild(button);
+                                td10.appendChild(button2);
+                                tr.appendChild(td1);
+                                tr.appendChild(td2);
+                                tr.appendChild(td3);
+                                tr.appendChild(td4);
+                                tr.appendChild(td5);
+                                tr.appendChild(td6);
+                                tr.appendChild(td7);
+                                tr.appendChild(td8);
+                                tr.appendChild(td9);
+                                tr.appendChild(td10);
+                                tab.appendChild(tr);
+                            });
+                        } else {
+                            console.log("No movies found.");
+                        }
+                    } else {
+                        console.error("Error: " + xhr.status);
+                    }
+                }
+            }
+            xhr.send();
+        }
+
+        function updateMovie(x) {
+            document.getElementById("mid").value = x.movieid;
+            document.getElementById("did").value = x.directorid;
+            document.getElementById("title").value = x.title;
+            document.getElementById("genre").value = x.genre;
+            document.getElementById("rating").value = x.rating;
+            document.getElementById("budget").value = x.budget;
+            document.getElementById("duration").value = x.duration;
+            document.getElementById("releaseyear").value = x.releaseyear;
+        }
+
+        function addMovie() {
+            var data = {
+                movieid: document.getElementById("mid").value,
+                directorid: document.getElementById("did").value,
+                title: document.getElementById("title").value,
+                genre: document.getElementById("genre").value,
+                rating: document.getElementById("rating").value,
+                budget: document.getElementById("budget").value,
+                duration: document.getElementById("duration").value,
+                releaseyear: document.getElementById("releaseyear").value
+            };
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/addmovie", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            var json = JSON.stringify(data);
+            xhr.send(json);
+            getMovies();
+        }
+
+        function deleteMovie(id) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("DELETE", "/deleteMovie/" + id, true);
+            xhr.send();
+            getMovies();
+        }
+
+        function saveMovie() {
+            var data = {
+                movieid: document.getElementById("mid").value,
+                directorid: document.getElementById("did").value,
+                title: document.getElementById("title").value,
+                genre: document.getElementById("genre").value,
+                rating: document.getElementById("rating").value,
+                budget: document.getElementById("budget").value,
+                duration: document.getElementById("duration").value,
+                releaseyear: document.getElementById("releaseyear").value
+            }
+            var json = JSON.stringify(data);
+            var xhr = new XMLHttpRequest();
+            xhr.open("PUT", "/savemovie", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(json);
+            getMovies();
+        }
+
+        function firstMovie() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/firstMovie/" + directorId, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    console.log(data);
+                    var movieid = document.getElementById("mid");
+                    var directorid = document.getElementById("did");
+                    var title = document.getElementById("title");
+                    var genre = document.getElementById("genre");
+                    var rating = document.getElementById("rating");
+                    var budget = document.getElementById("budget");
+                    var duration = document.getElementById("duration");
+                    var releaseyear = document.getElementById("releaseyear");
+                    movieid.value = data.movieid;
+                    directorid.value = data.directorid;
+                    title.value = data.title;
+                    genre.value = data.genre;
+                    rating.value = data.rating;
+                    budget.value = data.budget;
+                    duration.value = data.duration;
+                    releaseyear.value = data.releaseyear;
+                }
+            }
+            xhr.send();
+        }
+
+        function lastMovie() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/lastMovie/"+ directorId, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    console.log(data);
+                    var movieid = document.getElementById("mid");
+                    var directorid = document.getElementById("did");
+                    var title = document.getElementById("title");
+                    var genre = document.getElementById("genre");
+                    var rating = document.getElementById("rating");
+                    var budget = document.getElementById("budget");
+                    var duration = document.getElementById("duration");
+                    var releaseyear = document.getElementById("releaseyear");
+                    movieid.value = data.movieid;
+                    directorid.value = data.directorid;
+                    title.value = data.title;
+                    genre.value = data.genre;
+                    rating.value = data.rating;
+                    budget.value = data.budget;
+                    duration.value = data.duration;
+                    releaseyear.value = data.releaseyear;
+                }
+            }
+            xhr.send();
+        }
+
+        function nextMovie() {
+            index++;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/nextMovie/" + index+"/"+directorId, true)
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    console.log(data);
+                    var movieid = document.getElementById("mid");
+                    var directorid = document.getElementById("did");
+                    var title = document.getElementById("title");
+                    var genre = document.getElementById("genre");
+                    var rating = document.getElementById("rating");
+                    var budget = document.getElementById("budget");
+                    var duration = document.getElementById("duration");
+                    var releaseyear = document.getElementById("releaseyear");
+                    movieid.value = data.movieid;
+                    directorid.value = data.directorid;
+                    title.value = data.title;
+                    genre.value = data.genre;
+                    rating.value = data.rating;
+                    budget.value = data.budget;
+                    duration.value = data.duration;
+                    releaseyear.value = data.releaseyear;
+                }
+            }
+            xhr.send();
+        }
+
+        function previousMovie() {
+            if (index > 0) {
+                index--;
+                console.log("Previous index:", index); // Add this line for debugging
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "/previousMovie/" + index + "/" +directorId, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var data = JSON.parse(xhr.responseText);
+                        console.log(data);
+                        var movieid = document.getElementById("mid");
+                        var directorid = document.getElementById("did");
+                        var title = document.getElementById("title");
+                        var genre = document.getElementById("genre");
+                        var rating = document.getElementById("rating");
+                        var budget = document.getElementById("budget");
+                        var duration = document.getElementById("duration");
+                        var releaseyear = document.getElementById("releaseyear");
+
+                        movieid.value = data.movieid;
+                        directorid.value = data.directorid;
+                        title.value = data.title;
+                        genre.value = data.genre;
+                        rating.value = data.rating;
+                        budget.value = data.budget;
+                        duration.value = data.duration;
+                        releaseyear.value = data.releaseyear;
+                    }
+                }
+                xhr.send();
+            }
+        }
+    </script>
+</body>
+
+</html>
