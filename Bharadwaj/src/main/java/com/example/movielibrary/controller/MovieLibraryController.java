@@ -43,21 +43,21 @@ public class MovieLibraryController {
 	public ResponseEntity<Object> createmovie(@RequestBody Movie movie) {
 		System.out.println(movie.toString());
 		libraryRepository.addmovie(movie);
-		return new ResponseEntity<>("Book is created successfully", HttpStatus.CREATED);
+		return new ResponseEntity<>("Movie is added successfully", HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/savemovie", method = RequestMethod.PUT)
 	public ResponseEntity<Object> savemovie(@RequestBody Movie movie) {
 		System.out.println(movie.toString());
 		libraryRepository.savemovie(movie);
-		return new ResponseEntity<>("Book is created successfully", HttpStatus.CREATED);
+		return new ResponseEntity<>("Movie is saved successfully", HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/deleteMovie/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteMovie(@PathVariable int directorId) {
 		System.out.println(directorId);
 		libraryRepository.deleteMovie(directorId);
-		return new ResponseEntity<>("Book is created successfully", HttpStatus.CREATED);
+		return new ResponseEntity<>("Movie is deleted successfully", HttpStatus.CREATED);
 	}
 
 }
